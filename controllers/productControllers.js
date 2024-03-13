@@ -55,21 +55,24 @@ router.patch("/products/:id", async (req, res) => {
   // 4. Handle success: Respond with a 200 status code and the updated product data
   // 5. Handle errors: Respond with appropriate error messages and status codes
   try {
-    const id = req.params.id;
-    const data = await Product.findByIdAndUpdate(id, req.body, { new: true });
-
-    console.log(data);
-    if (data) {
+    const productId = req.params.id;
+    const { productName, price } = req.body;
+    const updatedProduct = await Product.findByIdAndUpdate(
+      productId,
+      { productName, price },
+      { new: true }
+    );
+    if (updatedProduct) {
       res
         .status(200)
-        .json({ message: "Product updated", updatedProduct: data });
+        .json({ message: "Product updated", product: updatedProduct });
     } else {
       res.status(404).json({ message: "Product not found" });
     }
   } catch (error) {
     res
       .status(500)
-      .send({ message: "Internal server error", error: error.message });
+      .json({ message: "Internal server error", error: error.message });
   }
 });
 
