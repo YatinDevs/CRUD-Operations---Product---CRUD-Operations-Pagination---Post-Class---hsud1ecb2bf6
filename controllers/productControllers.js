@@ -57,6 +57,12 @@ router.patch("/products/:id", async (req, res) => {
   try {
     const productId = req.params.id;
     const { productName, price } = req.body;
+
+    if (!productName && !price) {
+      return res
+        .status(400)
+        .json({ message: "ProductName and price are required for update" });
+    }
     const updatedProduct = await Product.findByIdAndUpdate(
       productId,
       { productName, price },
@@ -64,7 +70,9 @@ router.patch("/products/:id", async (req, res) => {
     );
     console.log(updatedProduct);
     if (updatedProduct) {
-      res.status(200).json({ message: "Product updated", updatedProduct });
+      res
+        .status(200)
+        .json({ message: "Product updated", product: updatedProduct });
     } else {
       res.status(404).json({ message: "Product not found" });
     }
