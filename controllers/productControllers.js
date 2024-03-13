@@ -56,17 +56,13 @@ router.patch("/products/:id", async (req, res) => {
   // 5. Handle errors: Respond with appropriate error messages and status codes
   try {
     const id = req.params.id;
-    const data = await Product.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
+    const data = await Product.findByIdAndUpdate(id, req.body, { new: true });
+
     console.log(data);
     if (data) {
-      res.status(200).send({
-        message: "Product updated",
-        product: data,
-      });
+      res.status(200).json({ message: "Product updated", product: data });
     } else {
-      res.status(404).send({ message: "Product not found" });
+      res.status(404).json({ message: "Product not found" });
     }
   } catch (error) {
     res
