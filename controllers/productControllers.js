@@ -58,18 +58,19 @@ router.patch("/products/:id", async (req, res) => {
     const productId = req.params.id;
     const { productName, price } = req.body;
 
-    const updatedProduct = await Product.findByIdAndUpdate(
-      productId,
+    const updatedProduct = await Product.findOneAndReplace(
+      { _id: productId },
       { productName, price },
       { new: true }
     );
     console.log(updatedProduct);
+
     if (updatedProduct) {
       res
         .status(200)
         .json({ message: "Product updated", product: updatedProduct });
     } else {
-      res.status(404).json({ message: "Product not found" });
+      res.status(404).json({ message: "Product not found", product: null });
     }
   } catch (error) {
     res
