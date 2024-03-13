@@ -4,8 +4,8 @@ const mongoose = require("mongoose");
 const productSchema = new mongoose.Schema({
   // Implement the product schema fields here as
   // productName as String and price as Number
-  productName: { type: String, required: true },
-  price: { type: Number, required: true },
+  productName: { type: String },
+  price: { type: Number },
 });
 
 // Create and export the Product model
