@@ -60,7 +60,9 @@ router.patch("/products/:id", async (req, res) => {
 
     console.log(data);
     if (data) {
-      res.status(200).json({ message: "Product updated", product: data });
+      res
+        .status(200)
+        .json({ message: "Product updated", updatedProduct: data });
     } else {
       res.status(404).json({ message: "Product not found" });
     }
