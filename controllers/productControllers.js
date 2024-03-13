@@ -58,11 +58,6 @@ router.patch("/products/:id", async (req, res) => {
     const productId = req.params.id;
     const { productName, price } = req.body;
 
-    if (!productName && !price) {
-      return res
-        .status(400)
-        .json({ message: "ProductName and price are required for update" });
-    }
     const updatedProduct = await Product.findByIdAndUpdate(
       productId,
       { productName, price },
