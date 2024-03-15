@@ -46,6 +46,28 @@ router.get("/products/:id", async (req, res) => {
   }
 });
 
+// Retrieve a product by ID
+router.get("/products", async (req, res) => {
+  // Implement product retrieval logic here
+  // 1. Extract the product ID from the request parameters (req.params.id)
+  // 2. Find the product by ID using Product.findById()
+  // 3. Handle success: Respond with a 200 status code and the product data
+  // 4. Handle errors: Respond with appropriate error messages and status codes
+  try {
+    const id = req.params.id;
+    console.log(id);
+    const resData = await Product.find();
+    if (resData) {
+      res.status(200).send({ message: "Products data", product: resData });
+    } else {
+      res.status(404).send({ message: "Product not found", product: null });
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .send({ message: "Internal server error", error: error.message });
+  }
+});
 // Update a product by ID
 router.patch("/products/:id", async (req, res) => {
   // Implement product update logic here
@@ -54,24 +76,35 @@ router.patch("/products/:id", async (req, res) => {
   // 3. Use Product.findByIdAndUpdate() to update the product
   // 4. Handle success: Respond with a 200 status code and the updated product data
   // 5. Handle errors: Respond with appropriate error messages and status codes
+
+  const ProductId = req.params.id;
+
+  const updatedProductData = req.body;
+
   try {
-    const id = req.params.id;
-    const updates = req.body;
-    const data = await Product.findByIdAndUpdate(
-      id,
-      { $set: updates },
-      { new: true }
+    const updatedProduct = await Product.findByIdAndUpdate(
+      ProductId,
+
+      updatedProductData,
+
+      {
+        new: true,
+      }
     );
-    console.log(data);
-    if (data) {
-      res.status(200).json({ message: "Product updated", product: data });
-    } else {
-      res.status(404).json({ message: "Product not found", product: null });
+
+    if (!updatedProduct) {
+      return res.status(404).json({ message: "Product not found" });
     }
-  } catch (error) {
+
     res
-      .status(500)
-      .send({ message: "Internal server error", error: error.message });
+
+      .status(200)
+
+      .json({ message: "Product updated", product: updatedProductData });
+  } catch (error) {
+    console.error("Error updating product:", error);
+
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
